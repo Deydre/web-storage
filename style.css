@@ -5,7 +5,8 @@
 }
 
 body{
-    margin: 20px
+    margin: 20px;
+    background:rgb(255, 255, 230);;
 }
 
 ul{
@@ -36,4 +37,24 @@ legend{
 label{
     font-size: 14px;
 }
+
+button{
+    padding: 2px 10px;
+    background: rgb(200, 161, 255);
+    border-radius: 3px;
+    border: 1.4px solid rgb(200, 161, 255);
+}
+
+.stylized{
+    border-radius: 3px;
+    border: 1.4px solid rgb(200, 161, 255);
+    padding: 2px 4px;
+}
+
+#extra-bottom{
+    margin-bottom: 20px;
+}
+
+
+
 
