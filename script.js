@@ -47,7 +47,7 @@ form.addEventListener('submit', (event) => {
     contacts.push(contact);
     // Transformar el array a String y subirlo a Web Storage
     localStorage.setItem("Contactos", JSON.stringify(contacts));
-    // NUEVO ---------desde aquí --->
+
     // PINTAR EL OBJETO EN EL DOM
      // Creamos un li
      let li = document.createElement("li");
@@ -74,10 +74,7 @@ form.addEventListener('submit', (event) => {
      li.appendChild(imagen1);
      // Unimos el li al ul
      ul.appendChild(li);
-    //------------> hasta aquí
-    // BORRAR ESTO:
-    // form.requestSubmit();
-    
+
 });
 
 
@@ -85,7 +82,6 @@ form.addEventListener('submit', (event) => {
 // NUEVO ------------desde aquí --->
 form.addEventListener('reset', (event) => {
     event.preventDefault(); 
-    // ESTO SE HA CAMBIADO:
     const numeroUsuario = event.target.elements.number.value;
     let contactos = JSON.parse(localStorage.getItem("Contactos")) || [];
 
@@ -104,7 +100,6 @@ form.addEventListener('reset', (event) => {
 
 
     }
-    //------------ > hasta aquí
 });
 
 
