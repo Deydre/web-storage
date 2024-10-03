@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <legend>Formulario</legend>
+        <div>
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" placeholder="Escribe tu nombre">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Escribe tu email">
+        </div>
+        <div>
+            <textarea rows="2" cols="30" name="comments" wrap="hard" placeholder="Pon tu mensaje aquí"></textarea>
+        </div>
+        <div>
+            <label for="image">Imagen</label>
+            <input type="file" id="image" name="image" placeholder="Escribe tu email">
+        </div>
+        <button type="submit">Enviar</button>
+        <div>
+
+
+            <label for="number">Introduce un número para borrar o deja vacío para borrar todo</label>
+            <input type="number" id="number" name="number" placeholder="Escribe un número">
+            <button type="reset">Borrar</button>
+        </div>
+
+        <!-- <button type="button" id="borrarUno">Borrar UN contacto</button> -->
+    </form>
+    <div id="divLista"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
