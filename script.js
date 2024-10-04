@@ -39,6 +39,10 @@ form.addEventListener('submit', (event) => {
 function guardarUser(contacto) {
     contacts.push(contacto);
     // Transformar el array a String y subirlo a Web Storage
+    actualizarUsers(contacts);
+}
+
+function actualizarUsers(contacts) {
     localStorage.setItem("Contactos", JSON.stringify(contacts));
 }
 
@@ -82,27 +86,24 @@ form.addEventListener('reset', (event) => {
     event.preventDefault();
     const emailBorrar = event.target.elements.emailBorrar.value;
 
-    // Si no se pone ningún numero
+    // Si no se pone ningún email
     if (emailBorrar === '') {
         // Borrar todos los contactos
         localStorage.removeItem("Contactos");
         // Borrar lo pintado en el DOM
         divLista.innerHTML = '';
-        // Si se pone un email
+    // Si se pone un email
     } else {
         // Bajar todo del local storage
-        // let listUsers = getUsers();
-        // // Filter y cargarse contacto
-        // let emailSeleccionado = listUsers.filter(user => user.email === emailBorrar);
-        // let indice = indexOf(listUsers.filter(user => user.email === emailBorrar));
-        // if (listUsers.includes(emailSeleccionado)){
-        //     // Borrar del array el índice del email seleccionado
-        //     listUsers.splice(indice, 1);
-        // }
-        // Volver a subir
+        let listUsers = getUsers();
 
-        // console.log(numeroUsuario);
-        // localStorage.setItem("Contactos", JSON.stringify(contacts));
+        // Recuperar el índice del objeto que tenga ese email con findIndex
+        // findIndex recorre un array y devuelve el índice del primer elemento que cumpla con una condición
+        let indice = listUsers.findIndex(user => user.email === emailBorrar);
+        listUsers.splice(indice, 1);
+
+        // Volver a subir
+        actualizarUsers(listUsers);
 
     }
 });
