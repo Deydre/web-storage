@@ -24,6 +24,7 @@ form div, label, input, textarea {
     width: 100%;
 }
 
+
 ul{
     display: flex;
     text-wrap:wrap;
@@ -68,6 +69,10 @@ button{
 
 #extra-bottom{
     margin-bottom: 20px;
+}
+
+form div:last-child button {
+    margin-top: 10px;
 }
 
 

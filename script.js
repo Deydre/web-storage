@@ -20,8 +20,6 @@ let ul = document.createElement("ul");
 divLista.appendChild(ul);
 
 
-
-
 // Evento de submit
 form.addEventListener('submit', (event) => {
     event.preventDefault();
