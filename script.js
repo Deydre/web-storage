@@ -1,7 +1,7 @@
-
 //PINTA DOS TARJETAS AL MDOIFICARLO. Te lo modifica pero a aprte te añade otra.
 //hay que buscar alguna solución y tenemos que hacer que antes de pintar en el DOM , 
 //debe comprobar si existe, si no existe lo debe pintar y si existe lo modifique. 
+
 
 
 
@@ -14,7 +14,7 @@ if (!localStorage.getItem("Contactos")) {
 // Acceder al form y div del body y guardarlos
 let form = document.querySelector('form');
 let divLista = document.querySelector("#divLista");
-let contacts = []; //Almacenaremos una lista de objetos (contactos) más adelante
+let contacts = [];   //alamacenaremos una lista de contactos más adelante
 // Crear ul y agregarla al div
 let ul = document.createElement("ul");
 divLista.appendChild(ul);
@@ -37,9 +37,11 @@ form.addEventListener('submit', (event) => {
         mensaje: mensaje,
         imagen: imagen
     }
-
+    // Limpiar imputs del formulario
+    form.reset();
     guardarUser(contact);
     pintarUser(contact)
+
 
 });
 
@@ -50,7 +52,7 @@ function guardarUser(contacto) {
     actualizarUsers(contacts);
 }
 
-// Función/ Convierte en una cadena de texto /almacena en local Storage bajo los contactos
+//convierte en una cadena de texto /almacena en local Storage bajo los contactos
 function actualizarUsers(contacts) {
     localStorage.setItem("Contactos", JSON.stringify(contacts));
 }
@@ -114,9 +116,9 @@ function editarUsuario(contacto) {
     form.elements.comments.value = contacto.mensaje;
     form.elements.image.value = contacto.imagen;
 
-    // Cambiar el comportamiento del botón de submit
+    // Cambiar el texto del botón de submit a "Guardar cambios"
     const originalSubmit = form.querySelector('button[type="submit"]');
-    originalSubmit.textContent = "Guardar"; // Cambiar el texto del botón a "Guardar"
+    originalSubmit.textContent = "Guardar cambios";
 
     // Añadir un evento al botón para guardar los cambios
     originalSubmit.onclick = () => {
@@ -134,7 +136,7 @@ function editarUsuario(contacto) {
 
             //vacía el formulario para poder agregar contactos de nuevo 
             form.reset();
-            originalSubmit.textContent = "Agregar Contacto";
+            originalSubmit.textContent = "Agregar contacto";
 
             // Actualizar el DOM
             const liToRemove = document.querySelector(`li[data-email="${contacto.email}"]`);
@@ -149,37 +151,27 @@ function editarUsuario(contacto) {
 
 
 // Crea botón para borrar todos los contactos guardados en Local Storage y en el DOM
-form.addEventListener('reset', (event) => {
+let deleteButton = document.querySelector('#botonBorrar');
+deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
-    const emailBorrar = event.target.elements.emailBorrar.value;
+    const emailBorrar = form.elements.emailBorrar.value;
 
-    // Si no se pone ningún email
     if (emailBorrar === '') {
-        //Mostrar mensaje alerta
         if (confirm("¿Estás seguro de que desea eliminar todos los contactos?")) {
-            // Borrar todos los contactos
             localStorage.removeItem("Contactos");
-            // Borrar lo pintado en el DOM
             divLista.innerHTML = '';
         }
-        // Si se pone un email
     } else {
-        // Bajar todo del local storage
         let listUsers = getUsers();
-
-        // Recuperar el índice del objeto que tenga ese email con findIndex
-        // findIndex recorre un array y devuelve el índice del primer elemento que cumpla con una condición
         let indice = listUsers.findIndex(user => user.email === emailBorrar);
         listUsers.splice(indice, 1);
 
-        // Mostrar mensaje de confirmación para borrar un contacto específico
         if (confirm(`¿Estás seguro de que quieres eliminar el contacto con email: ${emailBorrar}?`)) {
-            // Borrar lo pintado en el DOM
             let liToRemove = document.querySelector(`li[data-email="${emailBorrar}"]`);
             if (liToRemove) {
-                liToRemove.remove();  // Eliminar el <li> del DOM
+                liToRemove.remove();
             }
-            // Volver a subir
             actualizarUsers(listUsers);
+        }
     }
-}});
+});
