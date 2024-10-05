@@ -1,4 +1,12 @@
-// If el array de localStorage existe y es mayor que 0, no borrarlo
+
+//PINTA DOS TARJETAS AL MDOIFICARLO. Te lo modifica pero a aprte te añade otra.
+//hay que buscar alguna solución y tenemos que hacer que antes de pintar en el DOM , 
+//debe comprobar si existe, si no existe lo debe pintar y si existe lo modifique. 
+
+
+
+// If el array de localStorage existe y es mayor que 0, no borrarñp 
+//aseguramos de que haya siempre un item llamado contactos
 if (!localStorage.getItem("Contactos")) {
     localStorage.setItem("Contactos", JSON.stringify([]));
 }
@@ -10,6 +18,8 @@ let contacts = []; //Almacenaremos una lista de objetos (contactos) más adelant
 // Crear ul y agregarla al div
 let ul = document.createElement("ul");
 divLista.appendChild(ul);
+
+
 
 
 // Evento de submit
@@ -31,7 +41,7 @@ form.addEventListener('submit', (event) => {
     }
 
     guardarUser(contact);
-    pintarUser(contact);
+    pintarUser(contact)
 
 });
 
@@ -92,10 +102,52 @@ function pintarUser(contacto) {
     li.appendChild(email1);
     li.appendChild(mensaje1);
     li.appendChild(imagen1);
+    li.appendChild(editIcon); //icono
     // Unimos el li al ul
     ul.appendChild(li);
 }
 
+//AÑADIDO 
+
+function editarUsuario(contacto) {
+    // Completar el formulario con los datos del contacto
+    form.elements.name.value = contacto.nombre;
+    form.elements.email.value = contacto.email;
+    form.elements.comments.value = contacto.mensaje;
+    form.elements.image.value = contacto.imagen;
+
+    // Cambiar el comportamiento del botón de submit
+    const originalSubmit = form.querySelector('button[type="submit"]');
+    originalSubmit.textContent = "Guardar"; // Cambiar el texto del botón a "Guardar"
+
+    // Añadir un evento al botón para guardar los cambios
+    originalSubmit.onclick = () => {
+        if (confirm("¿Estás seguro de que deseas modificar el contacto?")) {
+            // Actualizar el contacto
+            let updatedContact = {
+                nombre: form.elements.name.value,
+                email: form.elements.email.value,
+                mensaje: form.elements.comments.value,
+                imagen: form.elements.image.value
+            };
+            // Guardar el contacto modificado
+            contacts[contacts.findIndex(c => c.email === contacto.email)] = updatedContact;
+            actualizarUsers(contacts);
+
+            //vacía el formulario para poder agregar contactos de nuevo 
+            form.reset();
+            originalSubmit.textContent = "Agregar Contacto";
+
+            // Actualizar el DOM
+            const liToRemove = document.querySelector(`li[data-email="${contacto.email}"]`);
+            if (liToRemove) {
+                liToRemove.remove(); // Eliminar el antiguo del DOM
+            }
+            pintarUser(updatedContact);
+        }
+
+    };
+}
 
 
 // Crea botón para borrar todos los contactos guardados en Local Storage y en el DOM
@@ -131,9 +183,5 @@ form.addEventListener('reset', (event) => {
             }
             // Volver a subir
             actualizarUsers(listUsers);
-
-        } else {
-            // Si el usuario cancela, no hacer nada
-        }
     }
-});
+}});
