@@ -1,4 +1,5 @@
-// If el array de localStorage existe y es mayor que 0, no borrarñp
+// If el array de localStorage existe y es mayor que 0, no borrarñp 
+//aseguramos de que haya siempre un item llamado contactos
 if (!localStorage.getItem("Contactos")) {
     localStorage.setItem("Contactos", JSON.stringify([]));
 }
@@ -6,7 +7,7 @@ if (!localStorage.getItem("Contactos")) {
 // Acceder al form y div del body y guardarlos
 let form = document.querySelector('form');
 let divLista = document.querySelector("#divLista");
-let contacts = [];
+let contacts = [];   //alamacenaremos una lista de contactos más adelante
 // Crear ul y agregarla al div
 let ul = document.createElement("ul");
 divLista.appendChild(ul);
@@ -42,6 +43,7 @@ function guardarUser(contacto) {
     actualizarUsers(contacts);
 }
 
+//convierte en una cadena de texto /almacena en local Storage bajo los contactos
 function actualizarUsers(contacts) {
     localStorage.setItem("Contactos", JSON.stringify(contacts));
 }
@@ -57,6 +59,10 @@ function getUsers() {
 function pintarUser(contacto){
 
     let li = document.createElement("li");
+
+    //AÑADIDO  añado atributo específico la lista con el email del contacto
+    //cada lista, tienen un valor únioc data-emial , que ocrresponde con el email del contacto
+    li.setAttribute("data-email", contacto.email);
 
     let nombre1 = document.createElement("p");
     nombre1.textContent = `Nombre: ${contacto.nombre}`;
@@ -88,10 +94,17 @@ form.addEventListener('reset', (event) => {
 
     // Si no se pone ningún email
     if (emailBorrar === '') {
+        //Mostrar mensaje alerta
+        if (confirm("¿Estás seguro de que desea eliminar todos los contactos?")) {
         // Borrar todos los contactos
         localStorage.removeItem("Contactos");
         // Borrar lo pintado en el DOM
         divLista.innerHTML = '';
+
+    } else {
+        // Si el usuario cancela, no hacer nada
+        
+    }
     // Si se pone un email
     } else {
         // Bajar todo del local storage
@@ -102,8 +115,20 @@ form.addEventListener('reset', (event) => {
         let indice = listUsers.findIndex(user => user.email === emailBorrar);
         listUsers.splice(indice, 1);
 
+         // Mostrar mensaje de confirmación para borrar un contacto específico
+         if (confirm(`¿Estás seguro de que quieres eliminar el contacto con email: ${emailBorrar}?`)) {
+        // Borrar lo pintado en el DOM
+        let liToRemove = document.querySelector(`li[data-email="${emailBorrar}"]`);
+        if (liToRemove) {
+            liToRemove.remove();  // Eliminar el <li> del DOM
+        }
         // Volver a subir
         actualizarUsers(listUsers);
+
+    } else {
+        // Si el usuario cancela, no hacer nada
+    }
+
 
     }
 });
