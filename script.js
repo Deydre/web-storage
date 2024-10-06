@@ -11,57 +11,10 @@ let contacts = getUsers();   // Cargar contactos existentes
 let ul = document.createElement("ul");
 divLista.appendChild(ul);
 
-let editing = false; // Variable para controlar si estamos editando o creando
+let editing = false; // --------- Variable para controlar si estamos editando o creando
 let currentEmail = ''; // Variable para almacenar el email del contacto a modificar
 
-// Evento de submit
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    // Accedemos a cada input del formulario
-    let nombre = event.target.elements.name.value;
-    let email = event.target.elements.email.value;
-    let mensaje = event.target.elements.comments.value;
-    let imagen = event.target.elements.image.value;
-
-    // Crear objeto del contacto
-    let contact = {
-        nombre: nombre,
-        email: email,
-        mensaje: mensaje,
-        imagen: imagen
-    };
-
-    // Verificar si estamos editando o creando
-    if (editing) {
-        // Si estamos editando, modificar el contacto existente
-        const index = contacts.findIndex(currentContact => currentContact.email === currentEmail);
-        contacts[index] = contact;
-        editing = false;
-        currentEmail = '';
-
-        // Cambiar texto del botón de vuelta a "Agregar contacto"
-        form.querySelector('button[type="submit"]').textContent = "Agregar contacto";
-
-        // Actualizar el contacto en el DOM
-        const liToRemove = document.querySelector(`li[data-email="${contact.email}"]`);
-        // Si existe la tarjeta concreta, eliminarla
-        liToRemove ? liToRemove.remove() : ""; 
-    } else {
-        // Si estamos creando, simplemente agregamos el nuevo contacto
-        contacts.push(contact);
-    }
-
-    // Actualizar el localStorage
-    actualizarUsers(contacts);
-
-    // Pintar el contacto en el DOM
-    pintarUser(contact);
-
-    // Limpiar el formulario
-    form.reset();
-});
-
+// FUNCIONES
 // Función para actualizar los contactos en localStorage
 function actualizarUsers(contacts) {
     localStorage.setItem("Contactos", JSON.stringify(contacts));
@@ -86,9 +39,10 @@ function pintarUser(contacto) {
 
     let mensaje1 = document.createElement("p");
     mensaje1.textContent = `Mensaje: ${contacto.mensaje}`;
-
-    let imagen1 = document.createElement("p");
-    imagen1.textContent = `Imagen de ${contacto.nombre}`;
+    // ------ FALTA PINTAR IMG
+    let imagen1 = document.createElement("img");
+    imagen1.setAttribute("src", contacto.imagen);
+    
 
     // Crear icono para editar
     let editIcon = document.createElement("span");
@@ -123,10 +77,61 @@ function editarUsuario(contacto) {
     // Cambiar el texto del botón a "Guardar cambios"
     form.querySelector('button[type="submit"]').textContent = "Guardar cambios";
 
-    // Marcar que estamos en modo edición
+    // ----- Marcar que estamos en modo edición
     editing = true;
     currentEmail = contacto.email;
 }
+
+
+// EVENTOS
+// Evento de submit
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Accedemos a cada input del formulario
+    let nombre = event.target.elements.name.value;
+    let email = event.target.elements.email.value;
+    let mensaje = event.target.elements.comments.value;
+    let imagen = event.target.elements.image.value;
+
+    // Crear objeto del contacto
+    let contact = {
+        nombre: nombre,
+        email: email,
+        mensaje: mensaje,
+        imagen: imagen
+    };
+
+    // ------- Verificar si estamos editando o creando
+    if (editing) {
+        // Si estamos editando, modificar el contacto existente
+        const index = contacts.findIndex(currentContact => currentContact.email === currentEmail);
+        contacts[index] = contact;
+        editing = false;
+        currentEmail = '';
+
+        // Cambiar texto del botón de vuelta a "Agregar contacto"
+        form.querySelector('button[type="submit"]').textContent = "Agregar contacto";
+
+        // Actualizar el contacto en el DOM
+        const liToRemove = document.querySelector(`li[data-email="${contact.email}"]`);
+        // Si existe la tarjeta concreta, eliminarla
+        liToRemove ? liToRemove.remove() : ""; 
+    } else {
+        // Si estamos creando, simplemente agregamos el nuevo contacto
+        contacts.push(contact);
+    }
+
+    // Actualizar el localStorage
+    actualizarUsers(contacts);
+
+    // Pintar el contacto en el DOM
+    pintarUser(contact);
+
+    // Limpiar el formulario
+    form.reset();
+});
+
 
 // Botón para borrar contactos
 let deleteButton = document.querySelector('#botonBorrar');

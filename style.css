@@ -11,6 +11,9 @@ body{
     margin: 40px;
 }
 
+img{
+    width: 200px;
+}
 
 form{
     display: flex;
